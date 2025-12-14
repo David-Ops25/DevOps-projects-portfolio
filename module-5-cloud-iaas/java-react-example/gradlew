@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+# Placeholder Gradle Wrapper script for portfolio structure.
+# To generate a real wrapper, run: gradle wrapper
+echo "This is a placeholder gradlew script."
+echo "Generate the real Gradle Wrapper by running: gradle wrapper"
+exit 1
