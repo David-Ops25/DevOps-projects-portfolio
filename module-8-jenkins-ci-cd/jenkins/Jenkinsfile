@@ -1,3 +1,5 @@
+@Library('jenkins-shared-lib') _
+
 pipeline {
   agent any
 
@@ -22,21 +24,14 @@ pipeline {
       }
     }
 
-    stage('Build Image') {
+    stage('Build & Push Image') {
       steps {
-        sh '''
-          cd module-8-jenkins-ci-cd/app
-          docker build -t $IMAGE_NAME:$IMAGE_TAG .
-        '''
-      }
-    }
-
-    stage('Push to Nexus') {
-      steps {
-        sh '''
-          docker tag $IMAGE_NAME:$IMAGE_TAG $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
-          docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
-        '''
+        dockerBuildAndPush(
+          imageName: IMAGE_NAME,
+          tag: IMAGE_TAG,
+          registry: REGISTRY,
+          workDir: 'module-8-jenkins-ci-cd/app'
+        )
       }
     }
 
@@ -49,21 +44,10 @@ pipeline {
 
   post {
     success {
-      echo " Module 8 pipeline completed successfully"
+      echo "Module 8 pipeline completed successfully"
     }
     failure {
-      echo " Module 8 pipeline failed"
+      echo "Module 8 pipeline failed"
     }
-  }
-}
-
-stage('Build & Push Image') {
-  steps {
-    dockerBuildAndPush(
-      imageName: IMAGE_NAME,
-      tag: IMAGE_TAG,
-      registry: REGISTRY,
-      workDir: 'module-8-jenkins-ci-cd/app'
-    )
   }
 }
