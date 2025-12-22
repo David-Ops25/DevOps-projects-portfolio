@@ -49,10 +49,21 @@ pipeline {
 
   post {
     success {
-      echo "✅ Module 8 pipeline completed successfully"
+      echo " Module 8 pipeline completed successfully"
     }
     failure {
-      echo "❌ Module 8 pipeline failed"
+      echo " Module 8 pipeline failed"
     }
+  }
+}
+
+stage('Build & Push Image') {
+  steps {
+    dockerBuildAndPush(
+      imageName: IMAGE_NAME,
+      tag: IMAGE_TAG,
+      registry: REGISTRY,
+      workDir: 'module-8-jenkins-ci-cd/app'
+    )
   }
 }
