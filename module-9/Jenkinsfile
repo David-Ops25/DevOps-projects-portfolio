@@ -4,24 +4,29 @@ pipeline {
   stages {
     stage('Deploy to EC2') {
       steps {
-        sshagent(['ec2-ssh-key']) {
-          withCredentials([usernamePassword(
+        withCredentials([
+          sshUserPrivateKey(
+            credentialsId: 'ec2-ssh-key',
+            keyFileVariable: 'SSH_KEY',
+            usernameVariable: 'SSH_USER'
+          ),
+          usernamePassword(
             credentialsId: 'dockerhub-creds',
             usernameVariable: 'DOCKER_USER',
             passwordVariable: 'DOCKER_PASS'
-          )]) {
-            sh """
-              ssh -o StrictHostKeyChecking=no ec2-user@51.20.144.208 '
-                docker login -u $DOCKER_USER -p $DOCKER_PASS &&
-                docker pull davidangyu/jenkins-cicd-demo-app:latest &&
-                docker rm -f jenkins-cicd-demo-app || true &&
-                docker run -d \
-                  --name jenkins-cicd-demo-app \
-                  -p 8080:3000 \
-                  davidangyu/jenkins-cicd-demo-app:latest
-              '
-            """
-          }
+          )
+        ]) {
+          sh """
+            ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SSH_USER@51.20.144.208 '
+              docker login -u "$DOCKER_USER" -p "$DOCKER_PASS" &&
+              docker pull davidangyu/jenkins-cicd-demo-app:latest &&
+              docker rm -f jenkins-cicd-demo-app || true &&
+              docker run -d \
+                --name jenkins-cicd-demo-app \
+                -p 8080:3000 \
+                davidangyu/jenkins-cicd-demo-app:latest
+            '
+          """
         }
       }
     }
