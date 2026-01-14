@@ -1,18 +1,35 @@
-# Module 9 – AWS Services | End-to-End DevOps CI/CD Project
+# Module 9 – AWS Services | End‑to‑End CI/CD Deployment on AWS (Jenkins + Docker)
 
-## Overview
-This project demonstrates a **production-style CI/CD pipeline** built using Jenkins, Docker, Docker Compose, and AWS EC2.
-The goal is to automate application build, containerization, deployment, and validation on AWS infrastructure.
+## What this project is
+A recruiter‑friendly, production‑style DevOps portfolio project that implements a complete **CI/CD pipeline** to deploy a containerized application to **AWS EC2** using **Jenkins**, **Docker**, **Docker Compose**, **Docker Hub**, and **AWS CLI**.
 
-This project follows **Module 9 (AWS Services)** and integrates knowledge from Modules 5–8 into a real-world DevOps workflow.
+This Module 9 project ties together the skills from Modules 5–8 (cloud fundamentals, artifact registries, containerization, CI/CD) into a practical deployment workflow.
 
-## Key Technologies
-- AWS EC2, IAM, Security Groups
-- Jenkins (Dockerized)
-- Docker & Docker Compose
-- GitHub
-- AWS CLI
-- Linux (Ubuntu, Amazon Linux)
+## What the project achieves
+- Provision and operate EC2 infrastructure for Jenkins (CI) and an application server (CD).
+- Build and version Docker images in Jenkins.
+- Push images to Docker Hub (or ECR in later enhancements).
+- Deploy to an EC2 app server using Docker Compose over SSH.
+- Validate deployments with smoke tests.
+- Integrate AWS CLI inside Jenkins with credential binding (no hardcoding).
 
-## Outcome
-A fully automated CI/CD pipeline capable of deploying containerized applications to AWS with minimal manual intervention.
+## Skills demonstrated (what recruiters look for)
+- AWS: EC2, IAM, security groups, SSH access
+- Jenkins: pipelines, credentials, plugins, Dockerized Jenkins
+- Containers: Docker build/push, Compose deployments
+- Automation: repeatable runbooks, troubleshooting, validation
+- Security hygiene: SSH key separation, credential binding, least‑privilege direction
+
+## Quick navigation
+- **Architecture:** `architecture/architecture.md`
+- **Runbook (step-by-step commands):** `runbook/module-9-runbook.md`
+- **Pipelines:** `pipelines/`
+- **Docker assets:** `docker/`
+- **Troubleshooting + lessons learned:** `challenges-and-lessons.md`
+- **Real-world impact:** `real-world-impact.md`
+
+## Deliverables included in this repo folder
+- Complete Jenkinsfile templates (CI/CD + deploy)
+- Complete Dockerfile and docker-compose.yml templates
+- Full command history / syntax to reproduce the environment
+- Professional write-up of challenges encountered and solutions

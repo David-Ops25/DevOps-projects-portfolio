@@ -1,21 +1,66 @@
-# Challenges Faced & Lessons Learned
+# Challenges Faced & Lessons Learned (Professional Summary)
 
-## SSH Authentication Failures
-**Problem:** Jenkins SSH failures due to key format and agent issues.
-**Solution:** Created a dedicated deployment key and used Jenkins Secret File credentials.
-**Lesson:** Always validate SSH manually before automating.
+## 1) Jenkins SSH key failures (libcrypto / invalid format)
+**Symptoms**
+- `Error loading key ... error in libcrypto`
+- `Permission denied (publickey)`
 
-## Docker Socket Permissions
-**Problem:** Jenkins could not access Docker daemon.
-**Solution:** Installed Docker client inside Jenkins container and aligned permissions.
-**Lesson:** Jenkins containers need explicit Docker access.
+**Root cause**
+- Key format incompatibility inside Jenkins container / ssh-agent plugin mismatches.
 
-## AWS CLI Confusion
-**Problem:** AWS CLI worked locally but not in Jenkins.
-**Solution:** Installed AWS CLI inside Jenkins container and used Jenkins credentials.
-**Lesson:** Jenkins runs in an isolated environment.
+**Fix**
+- Generated a dedicated deploy key specifically for Jenkins.
+- Stored it as a **Secret file** in Jenkins credentials.
+- Used direct `ssh -i "$KEYFILE"` in pipelines.
 
-## Smoke Test Failures
-**Problem:** App was running but not returning expected output.
-**Solution:** Improved retry logic and response validation.
-**Lesson:** Deployment success ≠ application health.
+**Lesson**
+Separate “human access” keys from “automation deploy” keys. Validate SSH manually first.
+
+---
+
+## 2) Docker build failed inside Jenkins: Docker not found
+**Symptoms**
+- `docker: not found` in pipeline.
+
+**Fix**
+- Installed Docker CLI inside the Jenkins container (Debian).
+- Ensured Jenkins container can access host Docker socket.
+
+**Lesson**
+Jenkins in Docker is an isolated runtime; tools must be present inside the container.
+
+---
+
+## 3) Docker socket permission denied
+**Symptoms**
+- `permission denied while trying to connect to the Docker daemon socket`
+
+**Fix**
+- Mapped `/var/run/docker.sock` into Jenkins.
+- Started Jenkins container with correct docker group GID (`--group-add <GID>`).
+
+**Lesson**
+Docker-in-Docker is different from Docker socket sharing. Permissions must match host.
+
+---
+
+## 4) Smoke test failed even though containers were running
+**Symptoms**
+- App container up, but pipeline failed at verification stage.
+
+**Fix**
+- Added retry loops and printed responses in Jenkins logs.
+- Matched expected output string to actual response.
+
+**Lesson**
+A green deployment stage isn't enough; always verify via health/smoke tests.
+
+---
+
+## 5) AWS CLI worked locally but not in Jenkins
+**Fix**
+- Installed AWS CLI v2 inside Jenkins container.
+- Used Jenkins credential binding via AWS Credentials plugin.
+
+**Lesson**
+Treat Jenkins as its own environment; configure dependencies and credentials explicitly.

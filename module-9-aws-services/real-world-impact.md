@@ -1,13 +1,20 @@
-# Real-World DevOps Impact
+# Real‑World Impact (How this project maps to real DevOps work)
 
-This project solves common production challenges:
-- Eliminates manual deployments
-- Ensures consistent environments
-- Improves deployment speed and reliability
-- Adds automated validation
-- Demonstrates secure credential handling
+## Business problems this solves
+- **Manual deployments** → replaced with repeatable, versioned automation
+- **Environment drift** → container images ensure consistent runtime
+- **Slow releases** → build/push/deploy in minutes, triggered by commits
+- **Risky rollouts** → immutable tags + smoke tests reduce production incidents
+- **Credential sprawl** → centralized, rotated credentials in Jenkins
 
-Applicable to:
-- Startups
-- Legacy VM-based infrastructures
-- Pre-Kubernetes environments
+## Where this pattern is used
+- VM/EC2 based services (before or alongside Kubernetes)
+- Teams standardizing deployments without rewriting infrastructure
+- Organizations modernizing release practices while keeping proven tooling (Jenkins)
+
+## Why it is recruiter‑relevant
+It demonstrates:
+- CI/CD ownership, not just scripting
+- Practical AWS fluency (EC2/IAM/security)
+- Containerization for reproducible delivery
+- Troubleshooting under real constraints (permissions, keys, sockets)
