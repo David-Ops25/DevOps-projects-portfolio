@@ -1,0 +1,47 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - demo2-net
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - demo2-net
+
+  app:
+    # set IMAGE env var in your deploy pipeline, e.g. davidangyu/jenkins-cicd-demo-app:8
+    image: ${IMAGE:-davidangyu/jenkins-cicd-demo-app:latest}
+    container_name: demo2-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      MESSAGE: "Module 9 CI/CD Pipeline Successful 🚀"
+    depends_on:
+      - mongodb
+    networks:
+      - demo2-net
+
+volumes:
+  mongo_data:
+
+networks:
+  demo2-net:
