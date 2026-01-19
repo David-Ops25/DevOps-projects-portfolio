@@ -1,0 +1,21 @@
+# Values for Bitnami MongoDB chart (demo-friendly)
+# Keep this small and simple for local clusters.
+
+architecture: replicaset
+replicaCount: 2
+
+auth:
+  enabled: true
+  rootPassword: "rootpassword"   # For demo only. In real work, use external secret management.
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
