@@ -1,0 +1,8 @@
+repositories: []
+
+releases:
+  - name: microshop
+    namespace: micro
+    chart: ../06-demo-helm-chart-microservices/microservices
+    values:
+      - ../06-demo-helm-chart-microservices/microservices/values.yaml

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto-config
+data:
+  mosquitto.conf: |
+    # Minimal mosquitto configuration (demo)
+    listener 1883
+    allow_anonymous false
+    password_file /mosquitto/config/passwordfile
+    persistence true
+    persistence_location /mosquitto/data/
+    log_dest stdout

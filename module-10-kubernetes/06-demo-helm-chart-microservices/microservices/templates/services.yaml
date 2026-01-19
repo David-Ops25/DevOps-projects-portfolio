@@ -1,0 +1,22 @@
+{{- range $name, $svc := .Values.services }}
+{{- if and $svc.enabled $svc.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservices.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "microservices.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  type: {{ default "ClusterIP" $svc.service.type }}
+  selector:
+    {{- include "microservices.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
+  ports:
+    - name: http
+      port: {{ default 80 $svc.service.port }}
+      targetPort: {{ default $svc.containerPort $svc.service.targetPort }}
+      protocol: TCP
+---
+{{- end }}
+{{- end }}
