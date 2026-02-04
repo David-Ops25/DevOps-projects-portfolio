@@ -14,23 +14,29 @@ pipeline {
 
     stage('Terraform Init') {
       steps {
-        sh 'terraform --version'
-        sh 'terraform init'
+        dir('module-12-terraform') {
+          sh 'terraform --version'
+          sh 'terraform init'
+        }
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-          sh 'terraform plan'
+        dir('module-12-terraform') {
+          withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+            sh 'terraform plan'
+          }
         }
       }
     }
 
     stage('Terraform Apply') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-          sh 'terraform apply -auto-approve'
+        dir('module-12-terraform') {
+          withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+            sh 'terraform apply -auto-approve'
+          }
         }
       }
     }
