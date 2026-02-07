@@ -1,0 +1,23 @@
+pipeline {
+  agent any
+  environment {
+    AWS_DEFAULT_REGION = "us-east-1"
+    CLUSTER_NAME = "demo-eks"
+  }
+  stages {
+    stage('Configure kubectl') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+          sh 'aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $CLUSTER_NAME'
+          sh 'kubectl get nodes'
+        }
+      }
+    }
+    stage('Deploy manifests') {
+      steps {
+        sh 'kubectl apply -f k8s/deploy.yaml'
+        sh 'kubectl rollout status deploy/webapp'
+      }
+    }
+  }
+}

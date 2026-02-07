@@ -1,0 +1,17 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+    stage('Build') { steps { sh 'mvn -B -DskipTests package' } }
+    stage('Test') { steps { sh 'mvn -B test' } }
+    stage('Docker Build') { steps { sh 'docker build -t YOUR_DOCKERHUB/app:${BUILD_NUMBER} .' } }
+    stage('Docker Push') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DH_USER', passwordVariable: 'DH_PASS')]) {
+          sh 'echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin'
+          sh 'docker push YOUR_DOCKERHUB/app:${BUILD_NUMBER}'
+        }
+      }
+    }
+  }
+}
