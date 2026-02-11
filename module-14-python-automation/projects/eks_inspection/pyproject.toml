@@ -1,0 +1,10 @@
+[project]
+name = "eks_inspection"
+version = "0.1.0"
+description = "eks_inspection"
+requires-python = ">=3.10"
+dependencies = ["boto3", "botocore"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

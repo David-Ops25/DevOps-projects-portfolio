@@ -1,0 +1,10 @@
+[project]
+name = "ec2_health_checks"
+version = "0.1.0"
+description = "ec2_health_checks"
+requires-python = ">=3.10"
+dependencies = ["boto3", "botocore"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

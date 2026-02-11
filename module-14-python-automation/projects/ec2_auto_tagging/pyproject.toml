@@ -1,0 +1,10 @@
+[project]
+name = "ec2_auto_tagging"
+version = "0.1.0"
+description = "ec2_auto_tagging"
+requires-python = ">=3.10"
+dependencies = ["boto3", "botocore"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
