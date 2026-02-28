@@ -14,7 +14,7 @@ It demonstrates an end-to-end DevOps workflow:
 - **Kubernetes (K3s)** cluster is automated and an application is deployed
 - **Jenkins** triggers Ansible (CI/CD entry point)
 
-> ⚠️ **Security note:** This repo does **not** include any AWS credentials or SSH private keys. You must provide your own.
+> ⚠️ **Security note:** This repo does **not** include any AWS credentials or SSH private keys for security reasons.
 
 ---
 
