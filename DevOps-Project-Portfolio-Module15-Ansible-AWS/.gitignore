@@ -1,0 +1,16 @@
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform.lock.hcl
+
+# Secrets / creds
+**/.aws/
+**/*.pem
+**/*.key
+
+# Ansible
+ansible/.retry
+
+# OS
+.DS_Store

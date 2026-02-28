@@ -1,0 +1,20 @@
+pipeline {
+  agent any
+  stages {
+    stage('Run Ansible on Control Node') {
+      steps {
+        sh '''
+          CONTROL_IP=${CONTROL_IP:-100.48.45.135}
+          ssh -o StrictHostKeyChecking=no \
+            -i /var/lib/jenkins/.ssh/jenkins_to_control \
+            ubuntu@$CONTROL_IP "
+              set -e
+              source ~/ansible-venv/bin/activate
+              cd ~/module15-ansible
+              ansible-playbook site.yml
+            "
+        '''
+      }
+    }
+  }
+}

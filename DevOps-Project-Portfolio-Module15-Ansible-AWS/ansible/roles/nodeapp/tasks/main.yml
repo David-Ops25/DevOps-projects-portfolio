@@ -1,0 +1,63 @@
+- name: Install Node.js 20 repo
+  shell: |
+    set -e
+    apt-get update
+    apt-get install -y ca-certificates curl gnupg
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+  args:
+    creates: /etc/apt/sources.list.d/nodesource.list
+
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: present
+    update_cache: true
+
+- name: Create app dir
+  file:
+    path: /opt/nodeapp
+    state: directory
+    owner: appuser
+    group: appuser
+    mode: "0755"
+
+- name: Copy server.js
+  copy:
+    src: server.js
+    dest: /opt/nodeapp/server.js
+    owner: appuser
+    group: appuser
+    mode: "0644"
+
+- name: Create systemd service
+  copy:
+    dest: /etc/systemd/system/nodeapp.service
+    content: |
+      [Unit]
+      Description=Module15 Node App
+      After=network.target
+
+      [Service]
+      Type=simple
+      User=appuser
+      WorkingDirectory=/opt/nodeapp
+      Environment=PORT=3000
+      ExecStart=/usr/bin/node /opt/nodeapp/server.js
+      Restart=always
+      RestartSec=3
+
+      [Install]
+      WantedBy=multi-user.target
+    mode: "0644"
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: true
+
+- name: Enable and start nodeapp
+  systemd:
+    name: nodeapp
+    enabled: true
+    state: started

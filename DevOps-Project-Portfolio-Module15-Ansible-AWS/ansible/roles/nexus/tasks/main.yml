@@ -1,0 +1,36 @@
+- name: Check if Docker is installed
+  command: docker --version
+  register: docker_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Install Docker (only if missing)
+  apt:
+    name: docker.io
+    state: present
+    update_cache: true
+  when: docker_check.rc is defined and docker_check.rc != 0
+
+- name: Ensure Docker service is enabled and started
+  systemd:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Create Nexus data directory
+  file:
+    path: /opt/nexus-data
+    state: directory
+    owner: 200
+    group: 200
+    mode: "0775"
+
+- name: Remove existing nexus container if present
+  shell: docker rm -f nexus || true
+
+- name: Run Nexus container (8081 + 8083)
+  shell: |
+    docker run -d --name nexus --restart=always \
+      -p 8081:8081 -p 8083:8083 \
+      -v /opt/nexus-data:/nexus-data \
+      sonatype/nexus3:latest

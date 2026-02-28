@@ -1,0 +1,17 @@
+- name: Bootstrap all servers
+  hosts: all
+  become: true
+  roles:
+    - bootstrap
+
+- name: Deploy Node app to managed nodes
+  hosts: role_ansible_managed
+  become: true
+  roles:
+    - nodeapp
+
+- name: Deploy Nexus to nexus host
+  hosts: role_nexus
+  become: true
+  roles:
+    - nexus

@@ -1,0 +1,30 @@
+- name: Update apt cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install base tools
+  apt:
+    name:
+      - curl
+      - unzip
+      - ca-certificates
+      - gnupg
+      - jq
+    state: present
+
+- name: Create appuser (security best practice)
+  user:
+    name: appuser
+    groups: sudo
+    shell: /bin/bash
+    create_home: true
+    state: present
+
+- name: Passwordless sudo for appuser
+  copy:
+    dest: /etc/sudoers.d/appuser
+    content: "appuser ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: "0440"
