@@ -1,0 +1,65 @@
+# DevOps Projects Portfolio (Modules 5–11)
+
+This repository contains hands-on demo projects completed as part of the **TWN DevOps Bootcamp** for **Modules 5 to 11**.  
+Each module folder includes:
+
+- **Project summary** (what the demo is about)
+- **What was implemented** (step-by-step)
+- **Challenges faced & fixes**
+- **Files created** (with example syntax/templates)
+- **Commands used** (copy/paste friendly)
+- **Next improvements**
+
+> ✅ Tip: Replace any placeholders like `YOUR_DOMAIN`, `YOUR_IP`, `YOUR_REPO`, `YOUR_KEY.pem`, etc. with your actual values.
+
+---
+
+## Repository Structure
+
+```
+DevOps-projects-portfolio/
+  module-05-cloud-iaas/
+  module-06-nexus-repo-manager/
+  module-07-docker-containers/
+  module-08-jenkins-ci-cd/
+  module-09-aws-services/
+  module-10-kubernetes/
+  module-11-eks/
+```
+
+---
+
+## Quick Navigation
+
+- [Module 5 – Cloud & IaaS Basics](./module-05-cloud-iaas/README.md)
+- [Module 6 – Nexus Repository Manager](./module-06-nexus-repo-manager/README.md)
+- [Module 7 – Containers with Docker](./module-07-docker-containers/README.md)
+- [Module 8 – CI/CD with Jenkins](./module-08-jenkins-ci-cd/README.md)
+- [Module 9 – AWS Services](./module-09-aws-services/README.md)
+- [Module 10 – Kubernetes](./module-10-kubernetes/README.md)
+- [Module 11 – Kubernetes on AWS (EKS)](./module-11-eks/README.md)
+
+---
+
+## How to Use This Repo
+
+1. Clone the repo
+   ```bash
+   git clone https://github.com/<YOUR_GITHUB_USERNAME>/DevOps-projects-portfolio.git
+   cd DevOps-projects-portfolio
+   ```
+
+2. Open a module folder and follow the README.
+
+3. Add your screenshots/logs:
+   - Put screenshots in `screenshots/`
+   - Put command logs in `logs/`
+
+---
+
+## Notes
+
+- This repo is designed to be **portfolio-ready**: clear documentation, repeatable steps, and real-world troubleshooting.
+- If you already completed the projects and want to “document after the fact”, paste your actual commands into each module's `logs/commands.md`.
+
+_Last updated: 2026-02-04_

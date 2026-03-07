@@ -1,0 +1,10 @@
+[project]
+name = "ebs_backup_restore"
+version = "0.1.0"
+description = "ebs_backup_restore"
+requires-python = ">=3.10"
+dependencies = ["boto3", "botocore"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

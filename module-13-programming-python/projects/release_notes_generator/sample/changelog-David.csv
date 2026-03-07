@@ -1,0 +1,5 @@
+type,description,ticket,owner
+Added,Add health endpoint,OPS-101,Dave
+Fixed,Fix login redirect bug,WEB-33,Amina
+Changed,Increase timeout for deployments,OPS-120,
+Removed,Remove deprecated flag,,Team

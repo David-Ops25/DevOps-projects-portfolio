@@ -1,0 +1,48 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_REGION   = 'eu-north-1'
+    CLUSTER_NAME = 'myapp-eks'
+    NAMESPACE    = 'myapp'
+
+    IMAGE_NAME = 'REPLACE_DOCKERHUB_USERNAME/myapp'
+    IMAGE_TAG  = "${env.BUILD_NUMBER}"
+
+    DOCKERHUB_USER  = credentials('dockerhub-username')
+    DOCKERHUB_TOKEN = credentials('dockerhub-token')
+
+    AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
+    AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+  }
+
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+
+    stage('Build Image') {
+      steps { sh 'docker build -f docker/Dockerfile -t ${IMAGE_NAME}:${IMAGE_TAG} .' }
+    }
+
+    stage('Push DockerHub') {
+      steps {
+        sh '''
+          echo "${DOCKERHUB_TOKEN}" | docker login -u "${DOCKERHUB_USER}" --password-stdin
+          docker push ${IMAGE_NAME}:${IMAGE_TAG}
+        '''
+      }
+    }
+
+    stage('Deploy to EKS') {
+      steps {
+        sh '''
+          aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}
+          kubectl get ns ${NAMESPACE} >/dev/null 2>&1 || kubectl create ns ${NAMESPACE}
+
+          sed -i "s|image: .*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" k8s/deployment.yaml
+          kubectl apply -k k8s
+          kubectl -n ${NAMESPACE} rollout status deploy/myapp
+        '''
+      }
+    }
+  }
+}

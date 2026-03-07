@@ -1,0 +1,7 @@
+pytest
+ruff
+moto
+botocore
+boto3
+requests
+paramiko
