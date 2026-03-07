@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: app-alerts
+      rules:
+        - alert: HighCPUUsage
+          expr: avg(rate(container_cpu_usage_seconds_total[5m])) > 0.5
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage detected"
+            description: "Average container CPU usage has been above 50% for more than 2 minutes."
+
+        - alert: PodNotRunning
+          expr: kube_pod_status_phase{phase!="Running"} > 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Pod not running"
+            description: "One or more pods are not in Running phase for more than 2 minutes."
