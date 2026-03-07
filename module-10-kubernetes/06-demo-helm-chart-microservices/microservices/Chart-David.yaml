@@ -1,0 +1,6 @@
+apiVersion: v2
+name: microservices
+description: Shared Helm chart that can deploy multiple microservices from a single values.yaml
+type: application
+version: 0.1.0
+appVersion: "1.0"

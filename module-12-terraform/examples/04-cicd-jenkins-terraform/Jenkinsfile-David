@@ -1,0 +1,39 @@
+pipeline {
+  agent any
+  environment {
+    AWS_REGION = 'eu-west-2'
+    TF_DIR     = 'examples/04-cicd-jenkins-terraform/terraform'
+  }
+
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+
+    stage('Terraform Init') {
+      steps { dir(env.TF_DIR) { sh 'terraform init' } }
+    }
+
+    stage('Terraform Plan') {
+      steps { dir(env.TF_DIR) { sh 'terraform plan -var-file=env/dev.tfvars' } }
+    }
+
+    stage('Terraform Apply') {
+      steps { dir(env.TF_DIR) { sh 'terraform apply -auto-approve -var-file=env/dev.tfvars' } }
+    }
+
+    stage('Deploy with Docker Compose') {
+      steps {
+        script {
+          def ip = sh(script: "cd ${env.TF_DIR} && terraform output -raw public_ip", returnStdout: true).trim()
+          echo "Provisioned server IP: ${ip}"
+
+          sshagent(credentials: ['ec2-ssh-key']) {
+            sh """
+              scp -o StrictHostKeyChecking=no ${env.TF_DIR}/deploy/docker-compose.yml ubuntu@${ip}:/home/ubuntu/docker-compose.yml
+              ssh -o StrictHostKeyChecking=no ubuntu@${ip} 'docker compose -f /home/ubuntu/docker-compose.yml up -d'
+            """
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+services:
+  app:
+    image: YOUR_DOCKERHUB_OR_ECR/app:latest
+    ports:
+      - "80:3000"
+    restart: unless-stopped

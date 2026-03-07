@@ -1,0 +1,15 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: myapp-fargate
+  region: eu-north-1
+  version: "1.29"
+
+iam:
+  withOIDC: true
+
+fargateProfiles:
+  - name: fp-myapp
+    selectors:
+      - namespace: myapp
